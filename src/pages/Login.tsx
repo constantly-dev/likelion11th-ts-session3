@@ -1,15 +1,28 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
+import useSWRMutation from 'swr/mutation';
+import { updateUser } from '../api/FetchUsers';
+import { useNavigate } from 'react-router-dom';
 
-type LoginValue = {
+type LoginValues = {
   email: string;
   password: string;
 };
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<LoginValue>();
+  const { register, handleSubmit } = useForm<LoginValues>();
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<LoginValue> = (data) => {
-    console.log(data);
+  const { trigger } = useSWRMutation('/api/auth/login', updateUser, {
+    onSuccess: (data) => {
+      if (data.status == 200) {
+        navigate('/users');
+      } else {
+        alert('로그인 중 오류가 발생했습니다.');
+      }
+    },
+  });
+  const onSubmit: SubmitHandler<LoginValues> = (data) => {
+    trigger(data);
   };
 
   return (
