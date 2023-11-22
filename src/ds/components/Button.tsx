@@ -9,7 +9,9 @@ const Button = ({ text }: ButtonProps) => {
 };
 
 const Container = styled.button`
-  width: 320px;
+  width: 100%;
+  min-width: 320px;
+  max-width: 500px;
   padding: 14px 16px;
   text-align: center;
   border-radius: 12px;

@@ -17,13 +17,13 @@ const Header = ({ onClickLogo, tabs }: HeaderProps) => {
   );
 };
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
   height: 70px;
   border-bottom: 1px solid ${({ theme }) => theme.color.gray3};
+  display: flex;
+  justify-content: center;
   position: sticky;
-  background: #fff;
   top: 0;
+  background: #fff;
 `;
 const InnerContainer = styled.div`
   width: 100%;

@@ -4,7 +4,7 @@ import Register from './pages/Register';
 import UserList from './pages/UserList';
 import Header from './ds/components/Header';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './ds/theme';
 import { GlobalStyles } from './ds/styles/GlobalStyles';
@@ -24,19 +24,20 @@ function App() {
     },
   ];
 
-  useEffect(() => {
-    navigate('/users');
-  }, []);
+  // useEffect(() => {
+  //   navigate('/users');
+  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <GlobalFonts />
-      <Header onClickLogo={() => navigate('/users')} tabs={tabs} />
+      <Header onClickLogo={() => navigate('/')} tabs={tabs} />
       <Routes>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
-        <Route path="/users" element={<UserList />}></Route>
+        <Route path="/" element={<UserList />}></Route>
+        {/* users를 그대로 쓰는 방법은 없나? */}
       </Routes>
     </ThemeProvider>
   );

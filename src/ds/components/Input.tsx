@@ -8,7 +8,7 @@ const Input = ({ title, isError }: InputProps) => {
     <Container>
       <DefaultContainer>
         <TitleBox>{title}</TitleBox>
-        <InputBox placeholder="text" />
+        <InputBox />
       </DefaultContainer>
       {isError && <HelperText>helper text</HelperText>}
     </Container>
@@ -16,7 +16,9 @@ const Input = ({ title, isError }: InputProps) => {
 };
 
 const Container = styled.div`
-  width: 320px;
+  width: 100%;
+  min-width: 320px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   gap: 6px;

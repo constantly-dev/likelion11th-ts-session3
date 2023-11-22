@@ -58,9 +58,14 @@ table {
   box-sizing: border-box;
 }
 
-button{
-	all: unset; 
-	cursor: pointer;
+button {
+	/* all: unset; 
+	cursor: pointer; */
+	/* 왜 대체왜ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠpadding이 한번 더 적용되나 가로만..? */
+	border: none;
+  outline: none;
+  background-color: inherit ;
+  cursor: pointer;
 }
 
 *,body {
