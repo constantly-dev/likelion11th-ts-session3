@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../api/FetchUsers';
 import Button from '../ds/components/Button';
 import Input from '../ds/components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { LoginValidation } from '../validators/LoginValidation';
 
 type LoginValues = {
   email: string;
@@ -12,15 +14,34 @@ type LoginValues = {
 };
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<LoginValues>();
+  const {
+    register,
+    handleSubmit,
+    // watch,
+    trigger: hookFormTrigger,
+    //swr trigger와 hook-form trigger이름이 겹쳐서 변경해보자
+
+    formState: { errors },
+  } = useForm<LoginValues>({
+    resolver: yupResolver(LoginValidation),
+    // mode: 'onChange',
+  });
+  // const inputValue = watch();
   const navigate = useNavigate();
 
   const { trigger } = useSWRMutation('/api/auth/login', updateUser, {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      const successRes = await data.json();
+      alert(successRes.data.message);
       if (data.status == 200) {
-        navigate('/users');
-      } else {
-        alert('로그인 중 오류가 발생했습니다.');
+        navigate('/');
+      }
+    },
+    onError: async (error) => {
+      const errorRes = await error.json();
+      alert(errorRes);
+      if (error.status == 400) {
+        navigate('/login');
       }
     },
   });
@@ -30,26 +51,33 @@ const Login = () => {
 
   return (
     <>
-      <div>Login</div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="email" placeholder="email" {...register('email')} />
-        <input
-          type="password"
-          placeholder="password"
-          {...register('password')}
-        />
-        <input type="submit" />
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        {/* noValidate는 기본 브라우저 validation을 제거 */}
+        <AllContainer>
+          <Title>로그인</Title>
+          <SubContainer>
+            <InputContainer>
+              <Input
+                name="email"
+                type="email"
+                title="이메일"
+                register={register('email')}
+                errors={errors}
+                onBlur={() => hookFormTrigger('email')}
+              />
+              <Input
+                name="password"
+                type="password"
+                title="비밀번호"
+                register={register('password')}
+                errors={errors}
+                onBlur={() => hookFormTrigger('password')}
+              />
+            </InputContainer>
+            <Button text="로그인"></Button>
+          </SubContainer>
+        </AllContainer>
       </form>
-      <AllContainer>
-        <Title>로그인</Title>
-        <SubContainer>
-          <InputContainer>
-            <Input title="이메일" isError={false} />
-            <Input title="비밀번호" isError={false} />
-          </InputContainer>
-          <Button text="로그인"></Button>
-        </SubContainer>
-      </AllContainer>
     </>
   );
 };

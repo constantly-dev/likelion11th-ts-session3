@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
-import { updateUser } from '../api/FetchUsers';
 import { useNavigate } from 'react-router-dom';
-import Input from '../ds/components/Input';
+import { updateUser } from '../api/FetchUsers';
 import Button from '../ds/components/Button';
+import Input from '../ds/components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { RegisterValidation } from '../validators/RegisterValidation';
 
 type RegisterValues = {
   username: string;
@@ -13,15 +15,27 @@ type RegisterValues = {
 };
 
 const Register = () => {
-  const { register, handleSubmit } = useForm<RegisterValues>();
+  const {
+    register,
+    handleSubmit,
+    trigger: hookFormTrigger,
+    formState: { errors },
+  } = useForm<RegisterValues>({ resolver: yupResolver(RegisterValidation) });
   const navigate = useNavigate();
 
   const { trigger } = useSWRMutation('/api/auth/register', updateUser, {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      const successRes = await data.json();
+      alert(successRes.data.message);
       if (data.status == 200) {
         navigate('/login');
-      } else {
-        alert('등록 중 오류가 발생했습니다.');
+      }
+    },
+    onError: async (error) => {
+      const errorRes = await error.json();
+      alert(errorRes);
+      if (error.status == 400) {
+        navigate('/login');
       }
     },
   });
@@ -32,28 +46,40 @@ const Register = () => {
 
   return (
     <>
-      <div>Register</div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" placeholder="username" {...register('username')} />
-        <input type="email" placeholder="email" {...register('email')} />
-        <input
-          type="password"
-          placeholder="password"
-          {...register('password')}
-        />
-        <input type="submit" />
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <AllContainer>
+          <Title>회원가입</Title>
+          <SubContainer>
+            <InputContainer>
+              <Input
+                name="username"
+                type="text"
+                title="이름"
+                register={register('username')}
+                errors={errors}
+                onBlur={() => hookFormTrigger('username')}
+              />
+              <Input
+                name="email"
+                type="email"
+                title="이메일"
+                register={register('email')}
+                errors={errors}
+                onBlur={() => hookFormTrigger('email')}
+              />
+              <Input
+                name="password"
+                type="password"
+                title="비밀번호"
+                register={register('password')}
+                errors={errors}
+                onBlur={() => hookFormTrigger('password')}
+              />
+            </InputContainer>
+            <Button text="로그인"></Button>
+          </SubContainer>
+        </AllContainer>
       </form>
-      <AllContainer>
-        <Title>회원가입</Title>
-        <SubContainer>
-          <InputContainer>
-            <Input title="이름" isError={false} />
-            <Input title="이메일" isError={false} />
-            <Input title="비밀번호" isError={false} />
-          </InputContainer>
-          <Button text="로그인"></Button>
-        </SubContainer>
-      </AllContainer>
     </>
   );
 };

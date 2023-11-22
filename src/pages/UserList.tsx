@@ -6,7 +6,6 @@ import Card from '../ds/components/Card';
 import { ReactComponent as BigLogoSvg } from '../ds/icons/BigLion.svg';
 const UserList = () => {
   const { data, error } = useSWR<UsersDataType>('/api/users', fetcher);
-  console.log(data);
 
   if (error) return <div>데이터를 불러오는 중에 오류가 발생했습니다.</div>;
   if (!data) return <div>로딩 중...</div>;

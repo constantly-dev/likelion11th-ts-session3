@@ -3,9 +3,18 @@ import { PropsWithChildren } from 'react';
 
 interface TapProps {
   isActive?: boolean;
+  onClickTab: () => void;
 }
-const Tab = ({ isActive = false, children }: PropsWithChildren<TapProps>) => {
-  return <Button $isActive={isActive}>{children}</Button>;
+const Tab = ({
+  isActive = false,
+  children,
+  onClickTab,
+}: PropsWithChildren<TapProps>) => {
+  return (
+    <Button $isActive={isActive} onClick={onClickTab}>
+      {children}
+    </Button>
+  );
 };
 
 const Button = styled.button<{ $isActive: boolean }>`
@@ -16,7 +25,7 @@ const Button = styled.button<{ $isActive: boolean }>`
   color: ${({ $isActive, theme }) =>
     $isActive ? theme.color.green : theme.color.gray1};
 
-  transition: border 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
     padding: 22px 0 18px 0;

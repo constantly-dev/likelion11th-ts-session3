@@ -71,5 +71,10 @@ button {
 *,body {
     font-family: 'Pretendard';
 }
+input{
+	-webkit-appearance : none;
+	-moz-appearance:none;
+	appearance:none;
+}
 
 `;
