@@ -3,7 +3,7 @@ export const fetcher = async (url: string) => {
   return result.json();
 };
 
-// eslint-disable-next-line
+//  eslint-disable-next-line
 export const updateUser = async (url: string, { arg }: { arg: any }) => {
   const result = await fetch(`${process.env.REACT_APP_BASE_URL}${url}`, {
     method: 'POST',

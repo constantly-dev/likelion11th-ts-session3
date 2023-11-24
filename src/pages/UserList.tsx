@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import styled from 'styled-components';
 import { fetcher } from '../api/FetchUsers';
-import { UsersDataType } from '../payload/UsersData';
+import { UsersDataType } from '../types/UsersData';
 import Card from '../ds/components/Card';
 import { ReactComponent as BigLogoSvg } from '../ds/icons/BigLion.svg';
 const UserList = () => {

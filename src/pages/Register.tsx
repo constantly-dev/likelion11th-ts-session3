@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { useNavigate } from 'react-router-dom';
-import { updateUser } from '../api/FetchUsers';
-import Button from '../ds/components/Button';
-import Input from '../ds/components/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterValidation } from '../validators/RegisterValidation';
+import { updateUser } from '../api/FetchUsers';
+import { RegisterError } from '../types/RegisterPayload';
+import Button from '../ds/components/Button';
+import Input from '../ds/components/Input';
 
 type RegisterValues = {
   username: string;
@@ -15,27 +17,28 @@ type RegisterValues = {
 };
 
 const Register = () => {
+  const [ResError, setResError] = useState<RegisterError>();
+
   const {
     register,
     handleSubmit,
+    clearErrors,
     trigger: hookFormTrigger,
     formState: { errors },
-  } = useForm<RegisterValues>({ resolver: yupResolver(RegisterValidation) });
+  } = useForm<RegisterValues>({
+    resolver: yupResolver(RegisterValidation),
+    mode: 'onSubmit',
+  });
   const navigate = useNavigate();
 
   const { trigger } = useSWRMutation('/api/auth/register', updateUser, {
     onSuccess: async (data) => {
-      const successRes = await data.json();
-      alert(successRes.data.message);
+      const Res = await data.json();
       if (data.status == 200) {
+        alert(Res.data.message);
         navigate('/login');
-      }
-    },
-    onError: async (error) => {
-      const errorRes = await error.json();
-      alert(errorRes);
-      if (error.status == 400) {
-        navigate('/login');
+      } else {
+        setResError(Res);
       }
     },
   });
@@ -58,6 +61,7 @@ const Register = () => {
                 register={register('username')}
                 errors={errors}
                 onBlur={() => hookFormTrigger('username')}
+                onFocus={() => clearErrors('username')}
               />
               <Input
                 name="email"
@@ -65,7 +69,12 @@ const Register = () => {
                 title="이메일"
                 register={register('email')}
                 errors={errors}
+                errorCode={
+                  ResError?.error.code === 'conflict_email' ? true : false
+                }
+                errorMsg={ResError?.error.message}
                 onBlur={() => hookFormTrigger('email')}
+                onFocus={() => clearErrors('email')}
               />
               <Input
                 name="password"
@@ -73,10 +82,12 @@ const Register = () => {
                 title="비밀번호"
                 register={register('password')}
                 errors={errors}
+                errorMsg={ResError?.error.message}
                 onBlur={() => hookFormTrigger('password')}
+                onFocus={() => clearErrors('password')}
               />
             </InputContainer>
-            <Button text="로그인"></Button>
+            <Button text="회원가입"></Button>
           </SubContainer>
         </AllContainer>
       </form>

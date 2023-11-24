@@ -29,7 +29,6 @@ function App() {
   // useEffect(() => {
   //   navigate('/users');
   // }, []);
-  // 이거는 모든 곳에서 /users로 와서 안됨
 
   return (
     <ThemeProvider theme={theme}>
@@ -40,7 +39,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/" element={<UserList />}></Route>
-        {/* users주소를 그대로 쓰는 방법은 없나? */}
+        {/* users주소를 그대로 쓰는 방법? */}
       </Routes>
     </ThemeProvider>
   );

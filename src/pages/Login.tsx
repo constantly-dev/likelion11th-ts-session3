@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../api/FetchUsers';
 import Button from '../ds/components/Button';
 import Input from '../ds/components/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidation } from '../validators/LoginValidation';
+import { LoginError } from '../types/LoginPayload';
 
 type LoginValues = {
   email: string;
@@ -14,34 +16,28 @@ type LoginValues = {
 };
 
 const Login = () => {
+  const [ResError, setResError] = useState<LoginError>();
+
   const {
     register,
     handleSubmit,
-    // watch,
+    clearErrors,
     trigger: hookFormTrigger,
-    //swr trigger와 hook-form trigger이름이 겹쳐서 변경해보자
-
     formState: { errors },
   } = useForm<LoginValues>({
     resolver: yupResolver(LoginValidation),
-    // mode: 'onChange',
+    mode: 'onSubmit',
   });
-  // const inputValue = watch();
   const navigate = useNavigate();
 
   const { trigger } = useSWRMutation('/api/auth/login', updateUser, {
     onSuccess: async (data) => {
-      const successRes = await data.json();
-      alert(successRes.data.message);
+      const Res = await data.json();
       if (data.status == 200) {
+        alert(Res.data.message);
         navigate('/');
-      }
-    },
-    onError: async (error) => {
-      const errorRes = await error.json();
-      alert(errorRes);
-      if (error.status == 400) {
-        navigate('/login');
+      } else {
+        setResError(Res);
       }
     },
   });
@@ -52,7 +48,6 @@ const Login = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        {/* noValidate는 기본 브라우저 validation을 제거 */}
         <AllContainer>
           <Title>로그인</Title>
           <SubContainer>
@@ -63,7 +58,12 @@ const Login = () => {
                 title="이메일"
                 register={register('email')}
                 errors={errors}
+                errorCode={
+                  ResError?.error.code === 'not_registered_email' ? true : false
+                }
+                errorMsg={ResError?.error.message}
                 onBlur={() => hookFormTrigger('email')}
+                onFocus={() => clearErrors('email')}
               />
               <Input
                 name="password"
@@ -71,7 +71,12 @@ const Login = () => {
                 title="비밀번호"
                 register={register('password')}
                 errors={errors}
+                errorCode={
+                  ResError?.error.code === 'wrong_password' ? true : false
+                }
+                errorMsg={ResError?.error.message}
                 onBlur={() => hookFormTrigger('password')}
+                onFocus={() => clearErrors('password')}
               />
             </InputContainer>
             <Button text="로그인"></Button>

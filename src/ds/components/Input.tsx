@@ -1,3 +1,4 @@
+// import { useState } from 'react';
 import styled from 'styled-components';
 
 interface InputProps {
@@ -8,13 +9,22 @@ interface InputProps {
   register?: any;
   // eslint-disable-next-line
   errors: any;
+  errorCode?: boolean;
+  errorMsg?: string;
   onBlur?: () => void;
-  // 모든 input에 validatio/이 속성이 사용되는건 아니니까 이렇게 처리하는게 맞을까?
+  onFocus?: () => void;
 }
 const Input = ({ name, title, type, ...props }: InputProps) => {
-  const { register, errors, onBlur } = props;
-  // props가 많을때 이렇게 빼줘서 표현 가능하다!
-
+  const { register, errors, onBlur, onFocus, errorCode, errorMsg } = props;
+  // const [isFocus, setIsFocus] = useState<boolean>(false);
+  // const handleFocus = () => {
+  //   onFocus;
+  //   setIsFocus(true);
+  // };
+  // const handleBlur = () => {
+  //   onBlur;
+  //   setIsFocus(false);
+  // };
   return (
     <Container>
       <DefaultContainer>
@@ -23,11 +33,13 @@ const Input = ({ name, title, type, ...props }: InputProps) => {
           type={type}
           {...register}
           onBlur={onBlur}
+          onFocus={onFocus}
           isError={errors[name] ? true : false}
-          // isError={!!errors[name]}도 가능
+          // isError={!!errors[name]}
         />
       </DefaultContainer>
       {errors[name] && <HelperText>{errors[name].message}</HelperText>}
+      {errorCode && !errors[name] && <HelperText>{errorMsg}</HelperText>}
     </Container>
   );
 };
@@ -51,7 +63,6 @@ const TitleBox = styled.div`
   color: ${({ theme }) => theme.color.gray1};
   ${({ theme }) => theme.typography.body1}
 `;
-// Q. text단독이면 div보다 p가 맞는가?
 
 const InputBox = styled.input<{ isError: boolean }>`
   width: 100%;
