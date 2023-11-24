@@ -4,7 +4,6 @@ import Register from './pages/Register';
 import UserList from './pages/UserList';
 import Header from './ds/components/Header';
 import { useNavigate } from 'react-router-dom';
-// import { useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './ds/theme';
 import { GlobalStyles } from './ds/styles/GlobalStyles';

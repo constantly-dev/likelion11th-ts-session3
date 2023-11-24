@@ -27,7 +27,8 @@ const Button = styled.button<{ $isActive: boolean }>`
 
   transition: all 0.2s ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:focus {
     padding: 22px 0 18px 0;
     color: ${({ theme }) => theme.color.green};
     border-bottom: 4px solid ${({ theme }) => theme.color.green};
