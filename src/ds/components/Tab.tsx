@@ -2,18 +2,16 @@ import styled from 'styled-components';
 import { PropsWithChildren } from 'react';
 
 interface TapProps {
-  isActive?: boolean;
+  isActive: boolean;
   onClickTab: () => void;
-  path: boolean;
 }
 const Tab = ({
-  isActive = false,
+  isActive,
   children,
   onClickTab,
-  path,
 }: PropsWithChildren<TapProps>) => {
   return (
-    <Button $isActive={path ? true : false} onClick={onClickTab}>
+    <Button $isActive={isActive} onClick={onClickTab}>
       {children}
     </Button>
   );

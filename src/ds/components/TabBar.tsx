@@ -21,7 +21,7 @@ const TabBar = ({ tabs, path }: TabBarProps) => {
         <Tab
           key={tab.id}
           onClickTab={() => navigate(`/${tab.type}`)}
-          path={path === `/${tab.type}` ? true : false}
+          isActive={path === `/${tab.type}` ? true : false}
         >
           {tab.title}
         </Tab>
