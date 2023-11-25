@@ -66,7 +66,7 @@ const InputBox = styled.input<{ isError: boolean }>`
   &:hover {
     border: 1px solid ${({ theme }) => theme.color.gray2};
   }
-  &:active {
+  &:focus {
     border: 1px solid ${({ theme }) => theme.color.gray1};
   }
   color: ${({ theme }) => theme.color.gray1};

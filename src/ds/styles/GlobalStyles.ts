@@ -59,14 +59,9 @@ table {
 }
 
 button {
-	/* all: unset; 
-	cursor: pointer; */
-	/* 왜 대체왜ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠpadding이 한번 더 적용되나 가로만..? */
-	border: none;
-  outline: none;
-  background-color: inherit ;
-  cursor: pointer;
-}
+	all: unset; 
+	cursor: pointer; 	
+} 
 
 *,body {
     font-family: 'Pretendard';
@@ -76,5 +71,6 @@ input{
 	-moz-appearance:none;
 	appearance:none;
 }
+
 
 `;
