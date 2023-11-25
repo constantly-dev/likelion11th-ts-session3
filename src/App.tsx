@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import UserList from './pages/UserList';
@@ -8,9 +8,12 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from './ds/theme';
 import { GlobalStyles } from './ds/styles/GlobalStyles';
 import { GlobalFonts } from './ds/styles/GlobalFonts';
+import { useSessionStore } from './stores/session';
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const username = useSessionStore((state) => state.username);
 
   const tabs = [
     {
@@ -33,7 +36,12 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <GlobalFonts />
-      <Header onClickLogo={() => navigate('/')} tabs={tabs} />
+      <Header
+        onClickLogo={() => navigate('/')}
+        tabs={tabs}
+        username={username}
+        path={location.pathname}
+      />
       <Routes>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>

@@ -9,6 +9,7 @@ import Input from '../ds/components/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidation } from '../validators/LoginValidation';
 import { LoginError } from '../types/LoginPayload';
+import { useSessionStore } from '../stores/session';
 
 type LoginValues = {
   email: string;
@@ -17,6 +18,7 @@ type LoginValues = {
 
 const Login = () => {
   const [ResError, setResError] = useState<LoginError>();
+  const login = useSessionStore((state) => state.login);
 
   const {
     register,
@@ -35,6 +37,7 @@ const Login = () => {
       const Res = await data.json();
       if (data.status == 200) {
         alert(Res.data.message);
+        login({ jwt: Res.data.jwt, username: Res.data.username });
         navigate('/');
       } else {
         setResError(Res);

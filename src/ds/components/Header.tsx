@@ -5,13 +5,29 @@ import TabBar, { Tab } from './TabBar';
 interface HeaderProps {
   onClickLogo: () => void;
   tabs: Tab[];
+  username: string | null;
+  path: string;
 }
-const Header = ({ onClickLogo, tabs }: HeaderProps) => {
+const Header = ({ onClickLogo, tabs, username, path }: HeaderProps) => {
   return (
     <Container>
       <InnerContainer>
         <Logo onClick={onClickLogo} />
-        <TabBar tabs={tabs} />
+        {username ? (
+          <TabBar
+            tabs={[
+              { id: 3, title: `${username}님 안녕하세요`, type: 'hi' },
+              {
+                id: 4,
+                title: '로그아웃',
+                type: 'logout',
+              },
+            ]}
+            path={path}
+          />
+        ) : (
+          <TabBar tabs={tabs} path={path} />
+        )}
       </InnerContainer>
     </Container>
   );

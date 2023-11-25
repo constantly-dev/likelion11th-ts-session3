@@ -10,14 +10,19 @@ export interface Tab {
 
 interface TabBarProps {
   tabs: Tab[];
+  path: string;
 }
 
-const TabBar = ({ tabs }: TabBarProps) => {
+const TabBar = ({ tabs, path }: TabBarProps) => {
   const navigate = useNavigate();
   return (
     <Container>
       {tabs.map((tab) => (
-        <Tab key={tab.id} onClickTab={() => navigate(`/${tab.type}`)}>
+        <Tab
+          key={tab.id}
+          onClickTab={() => navigate(`/${tab.type}`)}
+          path={path === `/${tab.type}` ? true : false}
+        >
           {tab.title}
         </Tab>
       ))}

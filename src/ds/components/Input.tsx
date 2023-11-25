@@ -16,15 +16,7 @@ interface InputProps {
 }
 const Input = ({ name, title, type, ...props }: InputProps) => {
   const { register, errors, onBlur, onFocus, errorCode, errorMsg } = props;
-  // const [isFocus, setIsFocus] = useState<boolean>(false);
-  // const handleFocus = () => {
-  //   onFocus;
-  //   setIsFocus(true);
-  // };
-  // const handleBlur = () => {
-  //   onBlur;
-  //   setIsFocus(false);
-  // };
+
   return (
     <Container>
       <DefaultContainer>
